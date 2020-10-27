@@ -1,0 +1,37 @@
+.container{
+    display: flex;
+    // overflow: auto;
+    .nav-left{
+        width: 12%;
+        min-width: 120px;
+        height: calc(100vh);
+        // background-color: aquamarine;
+        background-color: rgb(0,21,41);
+        // position: fixed;
+    }
+    .mian{
+        flex: 1;
+        height: calc(100vh);
+        //background-color:gray;
+        overflow: scroll;
+        // position:fixed;
+        
+    }
+    .content{
+        position: relative;
+        padding: 20px;
+        background-color: rgb(243,243,243);
+        &:after{
+            position: absolute;
+            content: '';
+            //background-color: red;
+            border-top: 9px solid white;
+            border-left: 12px solid transparent;
+            border-right: 12px solid transparent;
+            top: 0px;
+            left: 150px;
+           
+        }
+    }
+    
+}

@@ -49,6 +49,8 @@ const cssRegex = /\.css$/;
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
+const lessRegex = /\.(less)$/;
+const lessModuleRegex = /\.module\.(less)$/;
 
 // This is the production and development configuration.
 // It is focused on developer experience, fast rebuilds, and a minimal bundle.
@@ -370,8 +372,13 @@ module.exports = function(webpackEnv) {
                   'babel-preset-react-app/webpack-overrides'
                 ),
                 
-                plugins: [
+                plugins: [  
                   [
+                    // ['import',[{
+                    //   libraryName:'antd',
+                    //   style:true
+                    // }]],
+                    
                     require.resolve('babel-plugin-named-asset-import'),
                     {
                       loaderMap: {
@@ -381,7 +388,16 @@ module.exports = function(webpackEnv) {
                         },
                       },
                     },
+                    
                   ],
+                  [
+                    "import",
+                    {
+                        libraryName: "antd",
+                        // "libraryDirectory": "es",
+                        style: true
+                    }
+                ],
                 ],
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
@@ -418,6 +434,23 @@ module.exports = function(webpackEnv) {
                 sourceMaps: shouldUseSourceMap,
                 inputSourceMap: shouldUseSourceMap,
               },
+            },
+            //Less解析
+            {
+              test: /\.less$/,
+              use: [{
+                loader: 'style-loader',
+              }, {
+                loader: 'css-loader', // translates CSS into CommonJS
+              }, {
+                loader: 'less-loader', // compiles Less to CSS
+                options: {
+                  modifyVars: {
+                    'primary-color': '#ff0000',
+                  },
+                  javascriptEnabled: true,
+                },
+              }]
             },
             // "postcss" loader applies autoprefixer to our CSS.
             // "css" loader resolves paths in CSS and adds assets as dependencies.
@@ -485,6 +518,59 @@ module.exports = function(webpackEnv) {
                 'sass-loader'
               ),
             },
+             // Less 解析配置
+            // {
+            //   test: lessRegex,
+            //   exclude: lessModuleRegex,
+            //   use: getStyleLoaders(
+            //     {
+            //       importLoaders: 3,
+            //       sourceMap: isEnvProduction && shouldUseSourceMap,
+            //       modules: true
+            //     },
+            //     "less-loader"
+            //   ),
+            //   sideEffects: true,
+            // },
+            // {
+            //   test: lessModuleRegex,
+            //   use: getStyleLoaders(
+            //   {
+            //     importLoaders: 3,
+            //     sourceMap: isEnvProduction && shouldUseSourceMap,
+            //     modules: true,
+            //     getLocalIdent: getCSSModuleLocalIdent,
+            //   },
+            //     "less-loader"
+            //   ),
+            // },  
+            {
+              test: lessRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 3,
+                  sourceMap: isEnvProduction && shouldUseSourceMap,
+                  modules: {
+                    getLocalIdent: getCSSModuleLocalIdent,
+                  },
+                },
+                'less-loader'
+              ),
+            },
+            {
+              test: lessModuleRegex,
+              use: getStyleLoaders(
+                {
+                  importLoaders: 3,
+                  sourceMap: isEnvProduction && shouldUseSourceMap,
+                  modules: {
+                    getLocalIdent: getCSSModuleLocalIdent,
+                  },
+                },
+                'less-loader'
+              ),
+            },
+
             // "file" loader makes sure those assets get served by WebpackDevServer.
             // When you `import` an asset, you get its (virtual) filename.
             // In production, they would get copied to the `build` folder.

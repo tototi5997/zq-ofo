@@ -1,14 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Life from './pages/demo/Life';
-import App from './pages/demo/Life';
+// import Life from './pages/demo/Life';
+// import App from './pages/demo/Life';
+// import Admin from './admin'
 import * as serviceWorker from './serviceWorker';
+import IRouter from './router'
+import {Provider} from 'react-redux'
+// import Navdemo from './pages/navdemo';
+import configureStore from './redux/store/index'
+
+const store = configureStore();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Life />
-  </React.StrictMode>,
+  <Provider
+  store={store}
+  ><IRouter /></Provider>,
   document.getElementById('root')
 );
 
